@@ -23,15 +23,24 @@ class GameManager
   def player_info
     @display.msg("Player (1) Enter your name".red)
     player_one = gets.chomp
-    p1 = Player.new(player_one)
+    p1 = Player.new(player_one, player_wager)
 
     @display.msg("Player (2) Enter your name".light_blue)
     player_two = gets.chomp
-    p2 = Player.new(player_two)
+    p2 = Player.new(player_two,player_wager )
     [p1, p2]
   end
 
+
   private
+  def player_wager
+    @display.msg("Player  enter bet amount".yellow )
+    bet = gets.chomp
+    if bet.to_i == 0
+      player_wager
+    end
+    bet.to_i
+  end
 
   def game_end
     @display.msg "Thanks for Playing".red

@@ -27,9 +27,9 @@ class Board
     @current_turn = 9
   end
 
-
+  private
   def game_over?(_name = 'player')
-    @show_player_win = "Player 🏅 #{player_select.name.upcase} 🥇 wins 🏆 ".light_blue
+    @show_player_win = "Player 🏅 #{player_select.name.upcase} 🥇 wins  💰💵 #{player_earnings.to_s.green} 🤑 🏆 ".light_blue
     @show_game_draw = 'game draw' if @current_turn == 1
     win_x = ->(n) { n == "#{@player_one.icon} " }
     win_o = ->(n) { n == "#{@player_two.icon} " }
@@ -63,14 +63,12 @@ class Board
     end
 
     if @is_game_over
-      create_or_append_file(@show_player_win)
-      create_or_append_file(@display.display_board(@slots))
+      create_or_append_file([@show_player_win, @display.display_board(@slots), Time.now])
     end
   end
 
   def player_select
     return @player_one unless @current_turn.even?
-
     @player_two if @current_turn.even?
   end
 
@@ -78,7 +76,7 @@ class Board
     @display.msg("Player #{player_select.name} turn to play enter word ranging from one to nine ".green)
     player_slot_input = gets.chomp
 
-    if @slots.key?(player_slot_input.to_sym) == false # checks to see if player input matches any key
+    if !@slots.key?(player_slot_input.to_sym) # checks to see if player input matches any key
 
       @display.msg('please enter word ranging from one to nine or choose another slot'.red)
       @update = false
@@ -104,11 +102,19 @@ class Board
   end
 
 
+  def player_earnings
+     @player_one.bet_amount + @player_two.bet_amount
+  end
+
+public
   def game_loop
     while @current_turn > 0
       update_board
       @game_manager.game_update(@is_game_over)
     end
   end
+
+
+
 
 end
