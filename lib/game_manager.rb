@@ -1,60 +1,64 @@
-require '../lib/game_engine'
+require "../lib/game_engine"
+require "../lib/player"
+
 class GameManager
-include GameEngine
-@@game_count = 0
-def initialize(d, game_over = false)
-  @game_over = game_over
-  @display = d
-  @@game_count += 1
-end
+  include GameEngine
+  @@game_count = 0
 
-def game_start
-  info
-end
+  def initialize(d, game_over = false)
+    @game_over = game_over
+    @display = d
+    @@game_count += 1
+  end
 
-def game_update(game_over = @game_over)
-  @game_over = game_over
-  game_end if @game_over
-end
-
-def player_info
-  @display.msg('Player (1) Enter your name'.red)
-  player_one = gets.chomp
-  p1 = Player.new(player_one)
-
-  @display.msg('Player (2) Enter your name'.light_blue)
-  player_two = gets.chomp
-  p2 = Player.new(player_two)
-  [p1, p2]
-end
-
-private
-def game_end
-  @display.msg 'Thanks for Playing'.red
-  game_start
-end
-
-def info
-  @display.msg 'Type start to start Game , S to See Score History or Help for instructions or E to exit game'.red
-  input = gets.chomp
-  case true
-  when input.casecmp('s').zero?
-    open_file
-    info
-  when input.casecmp('start').zero?
-    player_info
-  when input.casecmp('help').zero?
-    instructions
-    info
-  when  input.casecmp('e').zero?
-    exit
-  else
+  def game_start
     info
   end
-end
 
-def instructions
-  @display.msg [
+  def game_update(game_over = @game_over)
+    @game_over = game_over
+    game_end if @game_over
+  end
+
+  def player_info
+    @display.msg("Player (1) Enter your name".red)
+    player_one = gets.chomp
+    p1 = Player.new(player_one)
+
+    @display.msg("Player (2) Enter your name".light_blue)
+    player_two = gets.chomp
+    p2 = Player.new(player_two)
+    [p1, p2]
+  end
+
+  private
+
+  def game_end
+    @display.msg "Thanks for Playing".red
+    game_start
+  end
+
+  def info
+    @display.msg "Type start to start Game , S to See Score History or Help for instructions or E to exit game".bg_red
+    input = gets.chomp
+    case true
+    when input.casecmp("s").zero?
+      open_file
+      info
+    when input.casecmp("start").zero?
+      player_info
+    when input.casecmp("help").zero?
+      instructions
+      info
+    when input.casecmp("e").zero?
+      exit
+    else
+      info
+    end
+  end
+
+  def instructions
+    @display.msg [
                    "               ___________________________________________________________________________________ \n",
                    "                       ****************************************************************              ".green,
                    "                             Welcome to TicTacToe Created By Ispirett And Armando".light_blue,
@@ -67,6 +71,6 @@ def instructions
                    "                   * The game is a draw if there are no empty slots and neither player has gotten three icons in row".light_blue,
                    "                ___________________________________________________________________________________ \n",
 
-               ]
-end
+                 ]
+  end
 end
