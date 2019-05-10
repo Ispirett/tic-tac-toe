@@ -1,5 +1,7 @@
-class Board
+require "../lib/game_engine"
 
+class Board
+  include GameEngine
   def initialize(p1, p2, d, game_manager)
     @display = d
     @game_manager = game_manager
@@ -35,7 +37,7 @@ class Board
     one = [@slots[:one], @slots[:two], @slots[:three]]
     two = [@slots[:four], @slots[:five], @slots[:six]]
     three = [@slots[:seven], @slots[:eight], @slots[:nine]]
-    four = [@slots[:one], @slots[:four], @salots[:seven]]
+    four = [@slots[:one], @slots[:four], @slots[:seven]]
     five = [@slots[:two], @slots[:five], @slots[:eight]]
     six = [@slots[:three], @slots[:six], @slots[:nine]]
     seven  = [@slots[:one], @slots[:five], @slots[:nine]]
@@ -67,9 +69,9 @@ class Board
   end
 
   def player_select
-    return @player_one unless current_turn.even?
+    return @player_one unless @current_turn.even?
 
-    @player_two if current_turn.even?
+    @player_two if @current_turn.even?
   end
 
   def can_board_update?
@@ -87,6 +89,13 @@ class Board
       @update = true
     end
 
+  end
+  
+  def turn_update
+    if @update == true
+      @current_turn -= 1
+      @display.msg "Turn #{@current_turn}  \n".yellow
+    end
   end
 
   def update_board
