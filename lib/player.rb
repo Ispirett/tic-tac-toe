@@ -1,4 +1,5 @@
 class Player
+
   attr_accessor :bet_amount
   def initialize(name, bet_amount = 50)
     @name = name
@@ -7,13 +8,16 @@ class Player
   end
 
 
+
   def name
     @name
   end
 
+
   def name=(string)
     @name
   end
+
 
   def icon
     @icon

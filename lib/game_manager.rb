@@ -23,6 +23,7 @@ class GameManager
   def player_info
     @display.msg("Player (1) Enter your name".red)
     player_one = gets.chomp
+
     p1 = Player.new(player_one, player_wager)
 
     @display.msg("Player (2) Enter your name".light_blue)
@@ -65,6 +66,7 @@ class GameManager
       info
     end
   end
+
 
   def instructions
     @display.msg [
