@@ -11,7 +11,28 @@ Remember Tic Tac Toe? See Wikipedia if you can’t remember the rules, or if you
 * Type "ruby start_game.rb" and press ENTER
 * There you go n.n have some fun.
 
+# Features
+* Score Tracker Feature
 
+  Once the game got finish up you will find => "Thanks for Playing" and ""Type start to start Game , S to See Score History or Help for instructions or E to exit game""
+
+  * Type S and press ENTER to see the score.
+  
+* Betting Feature
+
+  Once the game is open, there should be this => "Type start to start Game , S to See Score History or Help for instructions or E to exit game"
+
+  * Type "start" and press ENTER
+
+  Once you got here, there should be this => "Player (1) Enter your name" as well the player 2 will be asked for his name.
+
+  * Type Player 1 name and press ENTER
+  * Type Player 2 name and press ENTER
+  
+  Once there are both players in, there should be this => "Player enter bet amount" as well the player 2 will be asked for his amount.
+
+  * Type Player 1 amount and press ENTER
+  * Type Player 2 amount and press ENTER
 
 # Playing Guide
 Once the game is open, there should be this => "Type start to start Game , S to See Score History or Help for instructions or E to exit game"
