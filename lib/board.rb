@@ -88,30 +88,19 @@ class Board
     win_x = ->(n) { n == "#{@player_one.icon} " }
     win_o = ->(n) { n == "#{@player_two.icon} " }
     # conditions
-    one = [@slots[:one], @slots[:two], @slots[:three]]
-    two = [@slots[:four], @slots[:five], @slots[:six]]
-    three = [@slots[:seven], @slots[:eight], @slots[:nine]]
-    four = [@slots[:one], @slots[:four], @slots[:seven]]
-    five = [@slots[:two], @slots[:five], @slots[:eight]]
-    six = [@slots[:three], @slots[:six], @slots[:nine]]
-    seven  = [@slots[:one], @slots[:five], @slots[:nine]]
-    eight  = [@slots[:three], @slots[:five], @slots[:seven]]
+    cases =  [
+        [@slots[:one], @slots[:two], @slots[:three]],
+        [@slots[:four], @slots[:five], @slots[:six]],
+        [@slots[:seven], @slots[:eight], @slots[:nine]],
+        [@slots[:one], @slots[:four], @slots[:seven]],
+        [@slots[:two], @slots[:five], @slots[:eight]],
+        [@slots[:three], @slots[:six], @slots[:nine]],
+        [@slots[:one], @slots[:five], @slots[:nine]],
+        [@slots[:three], @slots[:five], @slots[:seven]]
+    ]
 
-    case true
-    when one.all?(win_x) || one.all?(win_o) ||
-         two.all?(win_x) || two.all?(win_o) ||
-         three.all?(win_x) || three.all?(win_o)
-      @is_game_over = true
-
-    when four.all?(&win_x) || four.all?(&win_o) ||
-         five.all?(&win_x) || five.all?(&win_o)
-         @is_game_over = true
-
-    when six.all?(&win_x) || six.all?(&win_o) ||
-         seven.all?(&win_x) || seven.all?(&win_o) ||
-         eight.all?(&win_x) || eight.all?(&win_o)
-         @is_game_over = true
-    else
+    cases.each do |i|
+      @is_game_over = true  if i.all?(win_x) || i.all?(win_o)
       show_draw_msg if @current_turn == 0
     end
   end
