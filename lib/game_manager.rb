@@ -25,6 +25,7 @@ class GameManager
   def player_info
     @display.msg("Player (1) Enter your name".red)
     player_one = gets.chomp
+
     p1 = Player.new(player_one, player_wager)
 
     @display.msg("Player (2) Enter your name".light_blue)
@@ -68,4 +69,24 @@ class GameManager
     end
   end
 
+<<<<<<< HEAD
+=======
+
+  def instructions
+    @display.msg [
+                   "               ___________________________________________________________________________________ \n",
+                   "                       ****************************************************************              ".green,
+                   "                             Welcome to TicTacToe Created By Ispirett And Armando".light_blue,
+                   "                       ****************************************************************              ".green,
+                   "               Rules of the game are as follows".yellow,
+                   "                   * The game is made up of a 3X3 grid three rows three columns".pink,
+                   "                   * Each player is assigned an icon {X} or {O} ".light_blue,
+                   "                   * Two players take turns attempting to get three icons in a row Horizontally, Vertically or diagonally ".pink,
+                   "                   * First player to get three icons in a row wins.".pink,
+                   "                   * The game is a draw if there are no empty slots and neither player has gotten three icons in row".light_blue,
+                   "                ___________________________________________________________________________________ \n",
+
+                 ]
+  end
+>>>>>>> 4a6b4053552b5d75780d48373f99aed19ac6a96d
 end

@@ -42,6 +42,7 @@ class Board
 
   def player_select
     return @player_one unless @current_turn.even?
+
     @player_two if @current_turn.even?
   end
 
@@ -120,7 +121,6 @@ public
       @game_manager.game_update(@is_game_over)
     end
   end
-
 
 
 
