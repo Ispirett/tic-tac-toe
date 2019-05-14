@@ -1,7 +1,9 @@
 require "../lib/game_engine"
 require "../lib/player"
+require_relative '../lib/gui'
 
 class GameManager
+  include GameMessages
   include GameEngine
   @@game_count = 0
 
@@ -66,20 +68,4 @@ class GameManager
     end
   end
 
-  def instructions
-    @display.msg [
-                   "               ___________________________________________________________________________________ \n",
-                   "                       ****************************************************************              ".green,
-                   "                             Welcome to TicTacToe Created By Ispirett And Armando".light_blue,
-                   "                       ****************************************************************              ".green,
-                   "               Rules of the game are as follows".yellow,
-                   "                   * The game is made up of a 3X3 grid three rows three columns".pink,
-                   "                   * Each player is assigned an icon {X} or {O} ".light_blue,
-                   "                   * Two players take turns attempting to get three icons in a row Horizontally, Vertically or diagonally ".pink,
-                   "                   * First player to get three icons in a row wins.".pink,
-                   "                   * The game is a draw if there are no empty slots and neither player has gotten three icons in row".light_blue,
-                   "                ___________________________________________________________________________________ \n",
-
-                 ]
-  end
 end
