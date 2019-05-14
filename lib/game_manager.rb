@@ -1,6 +1,6 @@
-require "../lib/game_engine"
-require "../lib/player"
-require_relative '../lib/gui'
+require_relative  "game_engine"
+require_relative  "player"
+require_relative 'gui'
 
 class GameManager
   include GameMessages
@@ -23,12 +23,11 @@ class GameManager
   end
 
   def player_info
-    @display.msg("Player (1) Enter your name".red)
+    enter_player_name_msg(1)
     player_one = gets.chomp
-
     p1 = Player.new(player_one, player_wager)
 
-    @display.msg("Player (2) Enter your name".light_blue)
+    enter_player_name_msg(2)
     player_two = gets.chomp
     p2 = Player.new(player_two,player_wager )
     [p1, p2]
@@ -37,7 +36,7 @@ class GameManager
 
   private
   def player_wager
-    @display.msg("Player  enter bet amount".yellow )
+    show_bet_msg
     bet = gets.chomp
     if bet.to_i == 0
       player_wager
@@ -46,12 +45,12 @@ class GameManager
   end
 
   def game_end
-    @display.msg "Thanks for Playing".red
+    show_end_msg
     game_start
   end
 
   def info
-    @display.msg "Type start to start Game , S to See Score History or Help for instructions or E to exit game".bg_red
+    show_start_msg
     input = gets.chomp
     case true
     when input.casecmp("s").zero?
@@ -68,25 +67,4 @@ class GameManager
       info
     end
   end
-
-<<<<<<< HEAD
-=======
-
-  def instructions
-    @display.msg [
-                   "               ___________________________________________________________________________________ \n",
-                   "                       ****************************************************************              ".green,
-                   "                             Welcome to TicTacToe Created By Ispirett And Armando".light_blue,
-                   "                       ****************************************************************              ".green,
-                   "               Rules of the game are as follows".yellow,
-                   "                   * The game is made up of a 3X3 grid three rows three columns".pink,
-                   "                   * Each player is assigned an icon {X} or {O} ".light_blue,
-                   "                   * Two players take turns attempting to get three icons in a row Horizontally, Vertically or diagonally ".pink,
-                   "                   * First player to get three icons in a row wins.".pink,
-                   "                   * The game is a draw if there are no empty slots and neither player has gotten three icons in row".light_blue,
-                   "                ___________________________________________________________________________________ \n",
-
-                 ]
-  end
->>>>>>> 4a6b4053552b5d75780d48373f99aed19ac6a96d
 end

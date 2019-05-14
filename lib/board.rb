@@ -1,9 +1,10 @@
-require_relative  "../lib/game_engine"
-require_relative '../lib/gui'
+require_relative  "game_engine"
+require_relative 'gui'
 
 class Board
   include GameEngine
   include GameMessages
+  MAX_TURNS = 9
   def initialize(p1, p2, d, game_manager)
     @display = d
     @game_manager = game_manager
@@ -13,8 +14,6 @@ class Board
     @player_two.icon = 'O'.light_blue
     @is_game_over = false
     @update = false
-    @show_player_win = ''
-    @show_game_draw = ''
     @slots = {
         one: '__',
         two: '__',
@@ -26,17 +25,18 @@ class Board
         eight: '  ',
         nine: '    '
     }
-    @current_turn = 9
+    @current_turn = MAX_TURNS
   end
 
   private
   def game_over?
       win_or_draw_check
-      show_winner_msg(player_select.name)
 
     if @is_game_over
-      create_or_append_file([show_winner_msg(player_select.name),
-                             @display.display_board(@slots), Time.now])
+      show_winner_msg(player_select.name, player_earnings)
+      create_or_append_file([
+      "Player 🏅 #{player_select.name.upcase} 🥇 wins  💰💵 #{player_earnings.to_s.green} 🤑 🏆 ".light_blue,
+       @display.display_board(@slots), Time.now])
     end
   end
 
@@ -50,7 +50,11 @@ class Board
     player_turn_msg(player_select.name)
     player_slot_input = gets.chomp
 
-    if !@slots.key?(player_slot_input.to_sym) # checks to see if player input matches any key
+
+    if !@slots.key?(player_slot_input.to_sym) &&
+        @slots[player_slot_input.to_sym] == @player_one.icon + ' ' ||
+        @slots[player_slot_input.to_sym] == @player_two.icon + ' '
+        # checks to see if player input matches any key
       turn_error_msg
       @update = false
     else
@@ -63,9 +67,9 @@ class Board
   end
   
   def turn_update
-    if @update == true
+    if @update
       @current_turn -= 1
-      @display.msg "Turn #{@current_turn}  \n".yellow
+      show_current_turn_msg(@current_turn)
     end
   end
 
@@ -94,23 +98,21 @@ class Board
     eight  = [@slots[:three], @slots[:five], @slots[:seven]]
 
     case true
-    when one.all?(win_x) || one.all?(win_o) || two.all?(win_x) || two.all?(win_o) ||
-      three.all?(win_x) || three.all?(win_o)
-      show_winner_msg(player_select.name)
+    when one.all?(win_x) || one.all?(win_o) ||
+         two.all?(win_x) || two.all?(win_o) ||
+         three.all?(win_x) || three.all?(win_o)
       @is_game_over = true
 
-    when four.all?(&win_x) || four.all?(&win_o) || five.all?(&win_x) || five.all?(&win_o)
-        @display.msg(@show_player_win)
-        show_winner_msg(player_select.name)
-        @is_game_over = true
+    when four.all?(&win_x) || four.all?(&win_o) ||
+         five.all?(&win_x) || five.all?(&win_o)
+         @is_game_over = true
 
     when six.all?(&win_x) || six.all?(&win_o) ||
-        seven.all?(&win_x) || seven.all?(&win_o) || eight.all?(&win_x) || eight.all?(&win_o)
-        show_winner_msg(player_select.name)
-        @is_game_over = true
-
+         seven.all?(&win_x) || seven.all?(&win_o) ||
+         eight.all?(&win_x) || eight.all?(&win_o)
+         @is_game_over = true
     else
-      show_draw_msg
+      show_draw_msg if @current_turn == 0
     end
   end
 
@@ -121,7 +123,4 @@ public
       @game_manager.game_update(@is_game_over)
     end
   end
-
-
-
 end

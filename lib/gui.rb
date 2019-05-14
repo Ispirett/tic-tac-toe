@@ -18,8 +18,8 @@ end
 
 module GameMessages
 
-  def show_winner_msg(player)
-    @show_player_win = "Player 🏅 #{player.upcase} 🥇 wins  💰💵 #{player_earnings.to_s.green} 🤑 🏆 ".light_blue
+  def show_winner_msg(player, player_earnings)
+    @display.msg  "Player 🏅 #{player.upcase} 🥇 wins  💰💵 #{player_earnings.to_s.green} 🤑 🏆 ".light_blue
   end
   def show_draw_msg
     @display.msg 'game draw'
@@ -33,8 +33,25 @@ module GameMessages
     @display.msg('please enter word ranging from one to nine or choose another slot'.red)
   end
 
-  def start_msg
-    @display.msg "Type start to start Game , S to See Score History or Help for instructions or E to exit game"
+  def show_start_msg
+    @display.msg "Type start to start Game , S to See Score History or Help for instructions or E to exit game".bg_red
+  end
+
+  def show_end_msg
+    @display.msg "Thanks for Playing".red
+  end
+
+  def show_bet_msg
+    @display.msg("Player  enter bet amount".yellow )
+  end
+
+  def enter_player_name_msg(player_num)
+    @display.msg("Player (#{player_num}) Enter your name".red) if player_num == 1
+    @display.msg("Player (#{player_num}) Enter your name".light_blue) if player_num == 2
+  end
+
+  def show_current_turn_msg(current_turn)
+    @display.msg "Turn #{current_turn}  \n".yellow
   end
 
   def instructions
