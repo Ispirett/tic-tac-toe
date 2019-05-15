@@ -14,8 +14,10 @@ Remember Tic Tac Toe? See Wikipedia if you can’t remember the rules, or if you
 # Features
 * Score Tracker Feature
 
-  Once the game got finish up you will find => "Thanks for Playing" and ""Type start to start Game , S to See Score History or Help for instructions or E to exit game""
-
+  ![Score Board](ticTacToe.png)
+        
+  Once the game is finish you will find => "Thanks for Playing" and ""Type start to start Game , S to See Score History or Help for instructions or E to exit game""
+    
   * Type S and press ENTER to see the score.
   
 * Betting Feature
@@ -49,7 +51,7 @@ Once there are both players in, then the game will start looping turns and you w
 
 * Type a number  between 1 and 9 using letters. like => one, two, three
 
-This will choose two positions using where x = input / 3 and y = input % 3 and will let the program know where to choose over the 3x3 board and finally check it with the player "X" or "O" and keep doing this till game is over.
+This will choose two positions using  x = input / 3 and y = input % 3 and will let the program know where to choose over the 3x3 board and finally check it with the player "X" or "O" and keep doing this till game is over.
 
 Once you get to finish one round you will find => "Thanks for Playing" and ""Type start to start Game , S to See Score History or Help for instructions or E to exit game""
 
