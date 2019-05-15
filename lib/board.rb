@@ -51,7 +51,7 @@ class Board
     player_slot_input = gets.chomp
 
 
-    if !@slots.key?(player_slot_input.to_sym) &&
+    if !@slots.key?(player_slot_input.to_sym) ||
         @slots[player_slot_input.to_sym] == @player_one.icon + ' ' ||
         @slots[player_slot_input.to_sym] == @player_two.icon + ' '
         # checks to see if player input matches any key
@@ -67,7 +67,7 @@ class Board
   end
   
   def turn_update
-    if @update
+    if @update == true
       @current_turn -= 1
       show_current_turn_msg(@current_turn)
     end
@@ -107,9 +107,9 @@ class Board
 
 public
   def game_loop
-    while @current_turn > 0
-      update_board
-      @game_manager.game_update(@is_game_over)
+    while @current_turn > 0 && !@is_game_over
+        update_board
+        @game_manager.game_update(@is_game_over)
     end
   end
 end

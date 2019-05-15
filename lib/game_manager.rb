@@ -5,17 +5,21 @@ require_relative 'gui'
 class GameManager
   include GameMessages
   include GameEngine
-  @@game_count = 0
-
+  attr_accessor :game_loop
   def initialize(d, game_over = false)
     @game_over = game_over
     @display = d
-    @@game_count += 1
+    @game_loop = true
+  end
+
+  def game_init
+    info
   end
 
   def game_start
-    info
+    player_info
   end
+
 
   def game_update(game_over = @game_over)
     @game_over = game_over
@@ -46,7 +50,6 @@ class GameManager
 
   def game_end
     show_end_msg
-    game_start
   end
 
   def info
@@ -57,7 +60,7 @@ class GameManager
       open_file
       info
     when input.casecmp("start").zero?
-      player_info
+      game_start
     when input.casecmp("help").zero?
       instructions
       info
