@@ -5,6 +5,7 @@ class Board
   include GameEngine
   include GameMessages
   MAX_TURNS = 9
+  attr_reader :is_game_over
   def initialize(p1, p2, d, game_manager)
     @display = d
     @game_manager = game_manager

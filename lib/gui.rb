@@ -38,7 +38,7 @@ module GameMessages
   end
 
   def show_end_msg
-    @display.msg "Thanks for Playing Run ``ruby start_game.rb `` to play again".red
+    @display.msg "Thanks for Playing ".red
   end
 
   def show_bet_msg
