@@ -69,7 +69,7 @@ class Board
   def turn_update
     if @update == true
       @current_turn -= 1
-      show_current_turn_msg(@current_turn)
+      show_current_turn_msg(9 - @current_turn)
     end
   end
 
