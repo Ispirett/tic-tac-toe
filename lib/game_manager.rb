@@ -1,19 +1,25 @@
-require "../lib/game_engine"
-require "../lib/player"
+require_relative  "game_engine"
+require_relative  "player"
+require_relative 'gui'
 
 class GameManager
+  include GameMessages
   include GameEngine
-  @@game_count = 0
-
+  attr_accessor :game_loop
   def initialize(d, game_over = false)
     @game_over = game_over
     @display = d
-    @@game_count += 1
+    @game_loop = true
+  end
+
+  def game_init
+    info
   end
 
   def game_start
-    info
+    player_info
   end
+
 
   def game_update(game_over = @game_over)
     @game_over = game_over
@@ -21,32 +27,40 @@ class GameManager
   end
 
   def player_info
-    @display.msg("Player (1) Enter your name".red)
+    enter_player_name_msg(1)
     player_one = gets.chomp
-    p1 = Player.new(player_one)
+    p1 = Player.new(player_one, player_wager)
 
-    @display.msg("Player (2) Enter your name".light_blue)
+    enter_player_name_msg(2)
     player_two = gets.chomp
-    p2 = Player.new(player_two)
+    p2 = Player.new(player_two,player_wager )
     [p1, p2]
   end
 
+
   private
+  def player_wager
+    show_bet_msg
+    bet = gets.chomp
+    if bet.to_i == 0
+      player_wager
+    end
+    bet.to_i
+  end
 
   def game_end
-    @display.msg "Thanks for Playing".red
-    game_start
+    show_end_msg
   end
 
   def info
-    @display.msg "Type start to start Game , S to See Score History or Help for instructions or E to exit game".bg_red
+    show_start_msg
     input = gets.chomp
     case true
     when input.casecmp("s").zero?
       open_file
       info
     when input.casecmp("start").zero?
-      player_info
+      game_start
     when input.casecmp("help").zero?
       instructions
       info
@@ -55,22 +69,5 @@ class GameManager
     else
       info
     end
-  end
-
-  def instructions
-    @display.msg [
-                   "               ___________________________________________________________________________________ \n",
-                   "                       ****************************************************************              ".green,
-                   "                             Welcome to TicTacToe Created By Ispirett And Armando".light_blue,
-                   "                       ****************************************************************              ".green,
-                   "               Rules of the game are as follows".yellow,
-                   "                   * The game is made up of a 3X3 grid three rows three columns".pink,
-                   "                   * Each player is assigned an icon {X} or {O} ".light_blue,
-                   "                   * Two players take turns attempting to get three icons in a row Horizontally, Vertically or diagonally ".pink,
-                   "                   * First player to get three icons in a row wins.".pink,
-                   "                   * The game is a draw if there are no empty slots and neither player has gotten three icons in row".light_blue,
-                   "                ___________________________________________________________________________________ \n",
-
-                 ]
   end
 end

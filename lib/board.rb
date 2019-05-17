@@ -1,7 +1,11 @@
-require "../lib/game_engine"
+require_relative  "game_engine"
+require_relative 'gui'
 
 class Board
   include GameEngine
+  include GameMessages
+  MAX_TURNS = 9
+  attr_reader :is_game_over
   def initialize(p1, p2, d, game_manager)
     @display = d
     @game_manager = game_manager
@@ -11,8 +15,6 @@ class Board
     @player_two.icon = 'O'.light_blue
     @is_game_over = false
     @update = false
-    @show_player_win = ''
-    @show_game_draw = ''
     @slots = {
         one: '__',
         two: '__',
@@ -24,47 +26,18 @@ class Board
         eight: '  ',
         nine: '    '
     }
-    @current_turn = 9
+    @current_turn = MAX_TURNS
   end
 
-
-  def game_over?(_name = 'player')
-    @show_player_win = "Player 🏅 #{player_select.name.upcase} 🥇 wins 🏆 ".light_blue
-    @show_game_draw = 'game draw' if @current_turn == 1
-    win_x = ->(n) { n == "#{@player_one.icon} " }
-    win_o = ->(n) { n == "#{@player_two.icon} " }
-    # conditions
-    one = [@slots[:one], @slots[:two], @slots[:three]]
-    two = [@slots[:four], @slots[:five], @slots[:six]]
-    three = [@slots[:seven], @slots[:eight], @slots[:nine]]
-    four = [@slots[:one], @slots[:four], @slots[:seven]]
-    five = [@slots[:two], @slots[:five], @slots[:eight]]
-    six = [@slots[:three], @slots[:six], @slots[:nine]]
-    seven  = [@slots[:one], @slots[:five], @slots[:nine]]
-    eight  = [@slots[:three], @slots[:five], @slots[:seven]]
-
-    case true
-    when one.all?(win_x) || one.all?(win_o) || two.all?(win_x) || two.all?(win_o) ||
-        three.all?(win_x) || three.all?(win_o)
-      @display.msg(@show_player_win)
-      @is_game_over = true
-
-    when four.all?(&win_x) || four.all?(&win_o) || five.all?(&win_x) || five.all?(&win_o)
-      @display.msg(@show_player_win)
-      @is_game_over = true
-
-    when six.all?(&win_x) || six.all?(&win_o) ||
-        seven.all?(&win_x) || seven.all?(&win_o) || eight.all?(&win_x) || eight.all?(&win_o)
-      @display.msg(@show_player_win)
-      @is_game_over = true
-
-    else
-      puts @show_game_draw
-    end
+  private
+  def game_over?
+      win_or_draw_check
 
     if @is_game_over
-      create_or_append_file(@show_player_win)
-      create_or_append_file(@display.display_board(@slots))
+      show_winner_msg(player_select.name, player_earnings)
+      create_or_append_file([
+      "Player 🏅 #{player_select.name.upcase} 🥇 wins  💰💵 #{player_earnings.to_s.green} 🤑 🏆 ".light_blue,
+       @display.display_board(@slots), Time.now])
     end
   end
 
@@ -75,12 +48,15 @@ class Board
   end
 
   def can_board_update?
-    @display.msg("Player #{player_select.name} turn to play enter word ranging from one to nine ".green)
+    player_turn_msg(player_select.name)
     player_slot_input = gets.chomp
 
-    if @slots.key?(player_slot_input.to_sym) == false # checks to see if player input matches any key
 
-      @display.msg('please enter word ranging from one to nine or choose another slot'.red)
+    if !@slots.key?(player_slot_input.to_sym) ||
+        @slots[player_slot_input.to_sym] == @player_one.icon + ' ' ||
+        @slots[player_slot_input.to_sym] == @player_two.icon + ' '
+        # checks to see if player input matches any key
+      turn_error_msg
       @update = false
     else
       @slots[player_slot_input.to_sym] = player_select.icon + ' '
@@ -94,7 +70,7 @@ class Board
   def turn_update
     if @update == true
       @current_turn -= 1
-      @display.msg "Turn #{@current_turn}  \n".yellow
+      show_current_turn_msg(@current_turn)
     end
   end
 
@@ -104,11 +80,37 @@ class Board
   end
 
 
-  def game_loop
-    while @current_turn > 0
-      update_board
-      @game_manager.game_update(@is_game_over)
+  def player_earnings
+     @player_one.bet_amount + @player_two.bet_amount
+  end
+
+
+  def win_or_draw_check
+    win_x = ->(n) { n == "#{@player_one.icon} " }
+    win_o = ->(n) { n == "#{@player_two.icon} " }
+    # conditions
+    cases =  [
+        [@slots[:one], @slots[:two], @slots[:three]],
+        [@slots[:four], @slots[:five], @slots[:six]],
+        [@slots[:seven], @slots[:eight], @slots[:nine]],
+        [@slots[:one], @slots[:four], @slots[:seven]],
+        [@slots[:two], @slots[:five], @slots[:eight]],
+        [@slots[:three], @slots[:six], @slots[:nine]],
+        [@slots[:one], @slots[:five], @slots[:nine]],
+        [@slots[:three], @slots[:five], @slots[:seven]]
+    ]
+
+    cases.each do |i|
+      @is_game_over = true  if i.all?(win_x) || i.all?(win_o)
+      show_draw_msg if @current_turn == 0
     end
   end
 
+public
+  def game_loop
+    while @current_turn > 0 && !@is_game_over
+        update_board
+        @game_manager.game_update(@is_game_over)
+    end
+  end
 end
